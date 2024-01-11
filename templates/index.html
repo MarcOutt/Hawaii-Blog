@@ -28,7 +28,9 @@
                             Posted by
                             <a href="#!">{{ post.author }}</a>
                             {{ post.date }}
+                            {% if current_user.id == 1: %}
                             <a href="{{url_for('delete_post', post_id=post.id) }}">✘</a>
+                            {% endif %}
                         </p>
                     </div>
                     <!-- Divider-->
@@ -36,11 +38,13 @@
                   {% endfor %}
 
                     <!-- Pager-->
+                    {% if current_user.id == 1: %}
                     <div class="d-flex justify-content-end mb-4">
                         <a class="btn btn-primary text-uppercase" href="{{ url_for('create_new_post') }}">
                             Create New Posts →
                         </a>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
