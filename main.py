@@ -1,15 +1,38 @@
 import smtplib
 
+from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, render_template, request
 
 from personnal_infos import my_email, password
 
 app = Flask(__name__)
 
+# CONNECT TO DB
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
+db = SQLAlchemy()
+db.init_app(app)
+
+
+# CONFIGURE TABLES
+class BlogPost(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), unique=True, nullable=False)
+    subtitle = db.Column(db.String(250), nullable=False)
+    date = db.Column(db.String(250), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    author = db.Column(db.String(250), nullable=False)
+    img_url = db.Column(db.String(250), nullable=False)
+
+
+with app.app_context():
+    db.create_all()
+
 
 @app.route('/')
 def get_all_posts():
-    return render_template("index.html")
+    result = db.session.execute(db.select(BlogPost))
+    posts = result.scalars().all()
+    return render_template("index.html", posts=posts)
 
 
 @app.route('/about')
