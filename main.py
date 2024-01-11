@@ -35,6 +35,16 @@ def get_all_posts():
     return render_template("index.html", posts=posts)
 
 
+@app.route('/post/<int:post_id>')
+def get_post(post_id):
+    requested_post = db.get_or_404(BlogPost, post_id)
+    return render_template("post.html", post=requested_post)
+
+@app.route('/new_post')
+def create_new_post():
+    pass
+
+
 @app.route('/about')
 def about():
     return render_template("about.html")
