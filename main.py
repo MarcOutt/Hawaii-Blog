@@ -8,7 +8,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_bootstrap import Bootstrap5
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from forms import CreatePostForm, RegisterForm, LoginForm
+from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from personnal_infos import my_email, password
 
 app = Flask(__name__)
@@ -111,7 +111,7 @@ def get_all_posts():
 @app.route('/post/<int:post_id>')
 def get_post(post_id):
     requested_post = db.get_or_404(BlogPost, post_id)
-    return render_template("post.html", post=requested_post)
+    return render_template("post.html", post=requested_post, form=CommentForm())
 
 
 @app.route("/new-post", methods=["GET", "POST"])
