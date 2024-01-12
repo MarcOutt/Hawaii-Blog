@@ -24,7 +24,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
 db = SQLAlchemy()
 db.init_app(app)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> fec157612890f73b59326dae9e9e855fef98ce2d
 @login_manager.user_loader
 def load_user(user_id):
     return db.get_or_404(User, user_id)
