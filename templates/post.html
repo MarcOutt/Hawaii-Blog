@@ -1,18 +1,26 @@
-{% from "bootstrap5/form.html" import render_form %} {% block content %}
+{% from "bootstrap5/form.html" import render_form %}
 {% include "header.html" %}
-        <!-- Page Header-->
-        <header class="masthead" style="background-image: url('{{ post.img_url }}')">
-            <div class="container position-relative px-4 px-lg-5">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="col-md-10 col-lg-8 col-xl-7">
-                        <div class="site-heading">
-                            <h1>{{ post.title }}</h1>
-                            <span class="subheading">{{ post.subtitle }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
+
+<!-- Page Header-->
+<header class="masthead" style="background-image: url('{{post.img_url}}')">
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="post-heading">
+          <h1>{{ post.title }}</h1>
+          <h2 class="subheading">{{ post.subtitle }}</h2>
+          <span class="meta"
+            >Posted by
+            <!-- Changed from post.author -->
+            <a href="#">{{ post.author.name }}</a>
+            on {{ post.date }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
 <!-- Post Content -->
 <article>
   <div class="container px-4 px-lg-5">
@@ -31,14 +39,38 @@
         {% endif %}
 
         <!-- Comments Area -->
-        <!-- Load the CKEditor -->
-        {{ ckeditor.load() }}
-        <!-- Configure it with the name of the form field from CommentForm -->
-        {{ ckeditor.config(name='comment_text') }}
-        <!-- Create the wtf quick form from CommentForm -->
-        {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+        <div class="container mt-5">
+          {{ ckeditor.load() }}
+          {{ ckeditor.config(name='comment_text') }}
+          <div class="mb-3">
+            {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+          </div>
+
+          <div class="comment">
+            <ul class="list-group list-group-flush commentList">
+              <!-- Show all comments -->
+              {% for comment in post.comments %}
+                <li class="list-group-item">
+                  <div class="d-flex align-items-center">
+                    <div class="commenterImage me-3">
+                      <img src="{{ comment.comment_author.email | gravatar }}" class="img-fluid rounded-circle" alt="Commenter Image">
+                    </div>
+                    <div class="commentText">
+                      {{ comment.text|safe }}
+                      <span class="sub-text">{{ comment.comment_author.surname }}</span>
+                      {% if current_user.id == 1 or current_user.id == post.author_id %}
+                        <a href="{{url_for('delete_comment', post_id=post.id, comment_id=comment.id) }}">✘</a>
+                      {% endif %}
+                    </div>
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </article>
-{% include "footer.html" %} {% endblock %}
+
+{% include "footer.html" %}
