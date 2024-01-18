@@ -37,7 +37,3 @@ Il s'agit d'une application web de blog simple construite avec Flask, SQLAlchemy
 ![img_2.png](img_2.png)
 ![img_3.png](img_3.png)
 ![img_4.png](img_4.png)
-
-## Licence
-
-Ce projet est sous licence MIT - consultez le fichier [LICENSE](LICENSE) pour plus de détails.
